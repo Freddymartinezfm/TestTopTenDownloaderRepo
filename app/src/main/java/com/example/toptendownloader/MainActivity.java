@@ -31,15 +31,10 @@ public class MainActivity extends AppCompatActivity  {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-
             Log.d(TAG, "onPostExecute():  parameter is \n" + s + "\n");
             ParseApplications parseApplications = new ParseApplications();
             parseApplications.parse(s);
 //            Log.d(TAG, "onPostExecute: done");
-
-
-            
-            
         }
 
         @Override

@@ -14,7 +14,7 @@ public class ParseApplications  {
     private ArrayList<FeedEntry> applications;
 
     public ParseApplications() {
-        applications = new ArrayList<>();
+        this.applications = new ArrayList<>();
 
     }
 
@@ -45,54 +45,73 @@ public class ParseApplications  {
                             currentRecord = new FeedEntry();
                         }
                         break;
+                        
                     case XmlPullParser.TEXT:
                         textValue = xpp.getText();
                         break;
+                        
                     case XmlPullParser.END_TAG:
                         Log.d(TAG, "parse: Ending tag for " +  tagName);
                         if (inEntry){
-                            switch (tagName){
-                                case "entry":
-                                    applications.add(currentRecord);
-                                    break;
-                                case "name":
-                                    currentRecord.setName(textValue);
-                                    break;
-                                case "releaseDate":
-                                    currentRecord.setReleaseDate(textValue);
-                                    break;
-                                case "artist":
-                                    currentRecord.setArtist(textValue);
-
-                                    break;
-                                case "summary":
-                                    currentRecord.setSummary(textValue);
-                                    break;
-                                case "image":
-                                    currentRecord.setImageUrl(textValue);
-                                    break;
+                            if ("entry".equalsIgnoreCase(tagName)){
+                                applications.add(currentRecord);
+                                inEntry = false;
+                            } else if ("name".equalsIgnoreCase(textValue)){
+                                currentRecord.setName(tagName);
+                            } else if ("artist".equalsIgnoreCase(textValue)){
+                                currentRecord.setArtist(tagName);
+                            } else if ("releaseDate".equalsIgnoreCase(textValue)){
+                                currentRecord.setReleaseDate(textValue);
+                            } else if ("summary".equalsIgnoreCase(textValue)){
+                                currentRecord.setSummary(textValue);
+                            } else if ("image".equalsIgnoreCase(textValue)){
+                                currentRecord.setImageUrl(textValue);
                             }
+                            
+                            
+                            //switch (tagName){
+                                //case "entry":
+                                    //applications.add(currentRecord);
+                                    //break;
+                                //case "name":
+                                    //currentRecord.setName(textValue);
+                                    //break;
+                                //case "releaseDate":
+                                    //currentRecord.setReleaseDate(textValue);
+                                    //break;
+                                //case "artist":
+                                    //currentRecord.setArtist(textValue);
+
+                                    //break;
+                                //case "summary":
+                                    //currentRecord.setSummary(textValue);
+                                    //break;
+                                //case "image":
+                                    //currentRecord.setImageUrl(textValue);
+                                    //break;
+                            //}
                         }
-                    break;
                         
-                        eventType = xpp.next();
+                    break;
+                    
+                    default:
+                        // nothing to do 
                 }
+                
+                 eventType = xpp.next();
 
             }
+            
             // loop through app list
             for (FeedEntry app : applications) {
                 Log.d(TAG, "**********");
                 Log.d(TAG, app.toString());
             }
-
-
-
-
-
-
+            
         } catch (XmlPullParserException e){
-            Log.e(TAG, "parse: Xml Parse Issue " +  e.getMessage());
             status = false;
+            Log.e(TAG, "parse: Xml Parse Issue " +  e.getMessage());
+            e.printStackTrace();
         }
 
         return status;
