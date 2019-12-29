@@ -13,10 +13,7 @@ public class ParseApplications  {
 
     private ArrayList<FeedEntry> applications;
 
-    public ParseApplications() {
-        this.applications = new ArrayList<>();
-
-    }
+    public ParseApplications() { this.applications = new ArrayList<>();}
 
     public ArrayList<FeedEntry> getApplications(){ return applications;}
 
@@ -102,7 +99,6 @@ public class ParseApplications  {
 
             }
             
-            // loop through app list
             for (FeedEntry app : applications) {
                 Log.d(TAG, "**********");
                 Log.d(TAG, app.toString());

@@ -21,10 +21,15 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate(): starting AsyncTask ");
         setContentView(R.layout.activity_main);
-        //listApps = (ListView) findViewById(r.id.xmlListView); add xmlListView to layout xml
+        //listApps = (ListView) findViewById(R.id.xmlListView); 
+        //TODO add xmlListView to layout xml and list_item
         
         DownloadData downloadData = new DownloadData();
-        downloadData.execute("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml");
+        downloadData.execute(
+        
+            "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml"
+        
+        );
         Log.d(TAG, "onCreate(): done ");
         
     }
@@ -38,7 +43,15 @@ public class MainActivity extends AppCompatActivity  {
             Log.d(TAG, "onPostExecute():  parameter is \n" + s + "\n");
             ParseApplications parseApplications = new ParseApplications();
             parseApplications.parse(s);
-//            Log.d(TAG, "onPostExecute: done");
+            
+            // error will be thrown until list_item and xmllist_view are created
+            //ArrayAdapter<FeedEntry> arrayAdapter = new ArrayAdapter<>(
+                    //MainActivity.this,
+                    //R.layout.list_item,
+                    //parseApplications.getApplications());
+            
+            //listApps.setAdapter(arrayAdapter);
+            
         }
 
         @Override
