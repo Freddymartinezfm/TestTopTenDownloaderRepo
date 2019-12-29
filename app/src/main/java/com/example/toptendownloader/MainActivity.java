@@ -14,15 +14,19 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity  {
     private static final String TAG = "MainActivity";
+    private ListView listApps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate(): starting AsyncTask ");
         setContentView(R.layout.activity_main);
+        //listApps = (ListView) findViewById(r.id.xmlListView); add xmlListView to layout xml
+        
         DownloadData downloadData = new DownloadData();
         downloadData.execute("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml");
         Log.d(TAG, "onCreate(): done ");
+        
     }
 
     private static class DownloadData extends AsyncTask<String, Void, String> {
