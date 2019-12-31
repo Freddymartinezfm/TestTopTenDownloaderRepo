@@ -71,7 +71,9 @@ public class ParseApplications  {
                             }
                         }
                     break;
+
                     default:
+                    break;
                 }
                 eventType = xpp.next();
             }
