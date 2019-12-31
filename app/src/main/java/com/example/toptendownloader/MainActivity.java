@@ -19,19 +19,63 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate(): starting AsyncTask ");
         setContentView(R.layout.activity_main);
-        //listApps = (ListView) findViewById(R.id.xmlListView); 
+        listApps = (ListView) findViewById(R.id.xmlListView); 
         //TODO add xmlListView to layout xml and list_item
         
+        downloadUrl("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml");
+        
+        
+        
+    }
+    
+    
+    @Override
+    public void onCreateOptionsMenu(Menu menu){
+        // TODO add menu item in layout
+        // TODO create menu folder
+        // TODO create feeds_menu
+        this.getMenuInflater().inflate(R.menu.feeds_menu, menu);
+        return true;
+        
+    }
+    
+    @Override
+    public onOptionsItemSelected(MenuItem item){
+        // TODO create free, paid, and songs menu items in xml, mnuFree, mnuPaid, mnuSongs 
+        int id = item.getItemId();
+        String feedUrl;
+        
+        // TODO make sure mnuFree... are created in layout
+        switch (id){
+            case R.id.mnuFree:
+            feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml";
+            break;
+            
+            case R.id.mnuPaid:
+            feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/toppaidapplications/limit=10/xml";
+            break;
+            
+            case R.id.mnuSongs:
+            feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topsongs/limit=10/xml";
+            break;
+            
+            default:
+            
+            return super.onOptionsItemSelected(menu);
+        
+        }
+        downloadUrl(feedUrl);
+        return true;
+        
+        
+    }
+    
+    private void downloadUrl(String feedUrl){
+        Log.d(TAG, "downloadUrl(): starting AsyncTask ");
         DownloadData downloadData = new DownloadData();
-        downloadData.execute(
-        
-            "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml"
-        
-        );
-        Log.d(TAG, "onCreate(): done ");
-        
+        downloadData.execute(feedUrl);
+        Log.d(TAG, "downloadUrl(): done ");
     }
 
     private static class DownloadData extends AsyncTask<String, Void, String> {
