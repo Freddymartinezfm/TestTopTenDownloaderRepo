@@ -91,13 +91,10 @@ public class MainActivity extends AppCompatActivity  {
             ParseApplications parseApplications = new ParseApplications();
             parseApplications.parse(s);
             
-            // error will be thrown until list_item and xmllist_view are created
-//            ArrayAdapter<FeedEntry> arrayAdapter = new ArrayAdapter<>(
-//                    MainActivity.this,
-//                    R.layout.list_item,
-//                    parseApplications.getApplications());
-//
-//            listApps.setAdapter(arrayAdapter);
+
+
+
+
 
 
 
