@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -90,15 +89,6 @@ public class MainActivity extends AppCompatActivity  {
             Log.d(TAG, "onPostExecute():  parameter is \n" + s + "\n");
             ParseApplications parseApplications = new ParseApplications();
             parseApplications.parse(s);
-            
-
-
-
-
-
-
-
-            
         }
 
         @Override
