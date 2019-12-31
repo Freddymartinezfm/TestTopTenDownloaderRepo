@@ -46,7 +46,7 @@ public class FeedAdapter extends ArrayAdapter {
 		viewHolder.tvArtist.setText(currentApp.getArtist());
 		viewHolder.tvSummary.setText(currentApp.getSummary());
 			
-		return view;
+		return convertView;
 	}
 	
 	private class ViewHolder {
