@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         // TODO add feeds_menu item in layout
-        // TODO create feeds_menu folder
+        // TODO create menu folder
         // TODO create feeds_menu
         this.getMenuInflater().inflate(R.menu.feeds_menu, menu);
         return true;
