@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -37,7 +36,7 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         // TODO add feeds_menu item in layout
-        // TODO create feeds_menu folder
+        // TODO create menu folder
         // TODO create feeds_menu
         this.getMenuInflater().inflate(R.menu.feeds_menu, menu);
         return true;
@@ -90,18 +89,6 @@ public class MainActivity extends AppCompatActivity  {
             Log.d(TAG, "onPostExecute():  parameter is \n" + s + "\n");
             ParseApplications parseApplications = new ParseApplications();
             parseApplications.parse(s);
-            
-            // error will be thrown until list_item and xmllist_view are created
-//            ArrayAdapter<FeedEntry> arrayAdapter = new ArrayAdapter<>(
-//                    MainActivity.this,
-//                    R.layout.list_item,
-//                    parseApplications.getApplications());
-//
-//            listApps.setAdapter(arrayAdapter);
-
-
-
-            
         }
 
         @Override
