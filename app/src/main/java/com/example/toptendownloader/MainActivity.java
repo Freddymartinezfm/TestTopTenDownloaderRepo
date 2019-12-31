@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        listApps = findViewById(R.id.xmlListView);
+        listApps = findViewById(R.id.xmlListView);
         //TODO add xmlListView to layout xml and list_item
         
         downloadUrl("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml");
