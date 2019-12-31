@@ -2,7 +2,6 @@ package com.example.toptendownloader;
 
 import android.util.Log;
 import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.StringReader;
@@ -25,6 +24,7 @@ public class ParseApplications  {
         String textValue = "";
 
         try {
+            Log.d(TAG, "parse: ======================");
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             factory.setNamespaceAware(true);
             XmlPullParser xpp = factory.newPullParser();
@@ -51,60 +51,37 @@ public class ParseApplications  {
                         Log.d(TAG, "parse: Ending tag for " +  tagName);
                         if (inEntry){
                             if ("entry".equalsIgnoreCase(tagName)){
+//                                Log.d(TAG, "parse: entry added");
                                 applications.add(currentRecord);
                                 inEntry = false;
-                            } else if ("name".equalsIgnoreCase(textValue)){
-                                currentRecord.setName(tagName);
-                            } else if ("artist".equalsIgnoreCase(textValue)){
-                                currentRecord.setArtist(tagName);
-                            } else if ("releaseDate".equalsIgnoreCase(textValue)){
+                            } else if ("name".equalsIgnoreCase(tagName)){
+//                                Log.d(TAG, "parse: name set");
+                                currentRecord.setName(textValue);
+                            } else if ("artist".equalsIgnoreCase(tagName)){
+//                                Log.d(TAG, "parse: artist set");
+                                currentRecord.setArtist(textValue);
+                            } else if ("releaseDate".equalsIgnoreCase(tagName)){
+//                                Log.d(TAG, "parse: releaseDate set");
                                 currentRecord.setReleaseDate(textValue);
-                            } else if ("summary".equalsIgnoreCase(textValue)){
+                            } else if ("summary".equalsIgnoreCase(tagName)){
+//                                Log.d(TAG, "parse: syummary set");
                                 currentRecord.setSummary(textValue);
-                            } else if ("image".equalsIgnoreCase(textValue)){
+                            } else if ("image".equalsIgnoreCase(tagName)){
                                 currentRecord.setImageUrl(textValue);
                             }
-                            
-                            
-                            //switch (tagName){
-                                //case "entry":
-                                    //applications.add(currentRecord);
-                                    //break;
-                                //case "name":
-                                    //currentRecord.setName(textValue);
-                                    //break;
-                                //case "releaseDate":
-                                    //currentRecord.setReleaseDate(textValue);
-                                    //break;
-                                //case "artist":
-                                    //currentRecord.setArtist(textValue);
-
-                                    //break;
-                                //case "summary":
-                                    //currentRecord.setSummary(textValue);
-                                    //break;
-                                //case "image":
-                                    //currentRecord.setImageUrl(textValue);
-                                    //break;
-                            //}
                         }
-                        
                     break;
-                    
                     default:
-                        // nothing to do 
                 }
-                
-                 eventType = xpp.next();
-
+                eventType = xpp.next();
             }
+
             
             for (FeedEntry app : applications) {
                 Log.d(TAG, "**********");
                 Log.d(TAG, app.toString());
             }
-            
-        } catch (XmlPullParserException e){
+        } catch (Exception e){
             status = false;
             Log.e(TAG, "parse: Xml Parse Issue " +  e.getMessage());
             e.printStackTrace();

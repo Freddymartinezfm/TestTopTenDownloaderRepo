@@ -65,11 +65,11 @@ public class FeedAdapter extends ArrayAdapter {
 		private TextView tvSummary;
 		
 		public ViewHolder(View v){
-			this.tvName = v.findViewById(R.id.tvName);
-			this.tvArtist = v.findViewById(R.id.tvArtist);
-			this.tvSummary = v.findViewById(R.id.tvSummary);
-			
-		
+//			this.tvName = v.findViewById(R.id.tvName);
+//			this.tvArtist = v.findViewById(R.id.tvArtist);
+//			this.tvSummary = v.findViewById(R.id.tvSummary);
+
+
 		}
 	}
 	
