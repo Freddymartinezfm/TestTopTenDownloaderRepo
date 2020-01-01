@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity  {
         Log.d(TAG, "downloadUrl(): done ");
     }
 
-    private static class DownloadData extends AsyncTask<String, Void, String> {
+    private class DownloadData extends AsyncTask<String, Void, String> {
         private static final String TAG = "DownloadData ";
 
         @Override
@@ -89,6 +89,9 @@ public class MainActivity extends AppCompatActivity  {
             Log.d(TAG, "onPostExecute():  parameter is \n" + s + "\n");
             ParseApplications parseApplications = new ParseApplications();
             parseApplications.parse(s);
+
+            FeedAdapter adapter = new FeedAdapter(MainActivity.this, R.layout.list_record, parseApplications.getApplications());
+            listApps.setAdapter(adapter);
         }
 
         @Override

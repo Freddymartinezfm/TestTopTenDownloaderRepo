@@ -33,31 +33,41 @@ public class FeedAdapter extends ArrayAdapter {
 	}
 	
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent){
+	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO create tvName, tvArtist, and tvSummary in layout 101
 
-		ViewHolder viewHolder;
-		
-		if (convertView == null){
-			convertView = layoutInflater.inflate(layoutResource, parent, false);
-			viewHolder = new ViewHolder(convertView);
-			convertView.setTag(viewHolder);
-		} else {
-			viewHolder = (ViewHolder)convertView.getTag();
-		}
-		
-		
-		//TextView tvName = (TextView) convertView.view.findViewById(R.id.tvName);
-		//TextView tvArtist = view.findViewById(R.id.tvArtist);
-		//TextView tvSummary = view.findViewById(R.id.tvSummary);
-		
+		View view = layoutInflater.inflate(layoutResource, parent, false);
+		 TextView tvName = view.findViewById(R.id.tvName);
+		 TextView tvArtist = view.findViewById(R.id.tvArtist);
+		 TextView tvSummary = view.findViewById(R.id.tvSummary);
+
 		FeedEntry currentApp = applications.get(position);
-		viewHolder.tvName.setText(currentApp.getName());
-		viewHolder.tvArtist.setText(currentApp.getArtist());
-		viewHolder.tvSummary.setText(currentApp.getSummary());
-			
-		return convertView;
+		tvName.setText(currentApp.getName());
+		tvArtist.setText(currentApp.getArtist());
+		tvSummary.setText(currentApp.getSummary());
+
+		return view;
 	}
+
+
+
+//		ViewHolder viewHolder;
+//
+//		if (convertView == null){
+//			convertView = layoutInflater.inflate(layoutResource, parent, false);
+//			viewHolder = new ViewHolder(convertView);
+//			convertView.setTag(viewHolder);
+//		} else {
+//			viewHolder = (ViewHolder)convertView.getTag();
+//		}
+//
+//		FeedEntry currentApp = applications.get(position);
+//		viewHolder.tvName.setText(currentApp.getName());
+//		viewHolder.tvArtist.setText(currentApp.getArtist());
+//		viewHolder.tvSummary.setText(currentApp.getSummary());
+//
+//		return convertView;
+//	}
 	
 	private class ViewHolder {
 		private TextView tvName;
