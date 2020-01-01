@@ -27,12 +27,8 @@ public class MainActivity extends AppCompatActivity  {
         //TODO add xmlListView to layout xml and list_item
         
         downloadUrl("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml");
-        
-        
-        
     }
-    
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         // TODO add feeds_menu item in layout
