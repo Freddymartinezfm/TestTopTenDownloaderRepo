@@ -18,30 +18,25 @@ import java.net.URL;
 public class MainActivity extends AppCompatActivity  {
     private static final String TAG = "MainActivity";
     private ListView listApps;
+    private String feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=%d/xml";
+    private int feedLimit = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listApps = findViewById(R.id.xmlListView);
-        //TODO add xmlListView to layout xml and list_item
-        
-        downloadUrl("http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml");
+        downloadUrl(String.format(feedUrl, feedLimit));
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        // TODO add feeds_menu item in layout
-        // TODO create menu folder
-        // TODO create feeds_menu
         this.getMenuInflater().inflate(R.menu.feeds_menu, menu);
         return true;
-        
     }
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        // TODO create free, paid, and songs feeds_menu items in xml, mnuFree, mnuPaid, mnuSongs
         int id = item.getItemId();
         String feedUrl;
 
@@ -59,14 +54,11 @@ public class MainActivity extends AppCompatActivity  {
             break;
 
             default:
-
             return super.onOptionsItemSelected(item);
 
         }
         downloadUrl(feedUrl);
         return true;
-
-
     }
     
     private void downloadUrl(String feedUrl){
@@ -82,10 +74,9 @@ public class MainActivity extends AppCompatActivity  {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.d(TAG, "onPostExecute():  parameter is \n" + s + "\n");
+            //Log.d(TAG, "onPostExecute():  parameter is \n" + s + "\n");
             ParseApplications parseApplications = new ParseApplications();
             parseApplications.parse(s);
-
             FeedAdapter adapter = new FeedAdapter(MainActivity.this, R.layout.list_record, parseApplications.getApplications());
             listApps.setAdapter(adapter);
         }
@@ -95,13 +86,13 @@ public class MainActivity extends AppCompatActivity  {
             Log.d(TAG, "doInBackground(): starts with " + strings[0]);
             String rssFeed = downloadXML(strings[0]);
             if (rssFeed == null){
-                Log.e(TAG, "doInBackground(): error downloading ");
+                //Log.e(TAG, "doInBackground(): error downloading ");
             }
             return rssFeed;
         }
 
         private String downloadXML(String urlPath){
-            Log.d(TAG, "downloadXML(): path is " + urlPath);
+            //Log.d(TAG, "downloadXML(): path is " + urlPath);
             StringBuilder xmlResult = new StringBuilder();
             try {
                 URL url = new URL(urlPath);
@@ -110,14 +101,12 @@ public class MainActivity extends AppCompatActivity  {
                 Log.d(TAG, "downloadXML(): Response Code is " + response);
                 if (response != 200) Log.d(TAG, "downloadXML(): Response Code is " + response);
 
-
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
                 int charsRead;
                 char[] inputBuffer = new char[500];
                 while (true) {
-
-                    Log.d(TAG, "downloadXML(): reading..................");
+                    //Log.d(TAG, "downloadXML(): reading..................");
                     charsRead = reader.read(inputBuffer);
                     if (charsRead < 0) { // or -1 from documentation
                         break;
@@ -135,7 +124,6 @@ public class MainActivity extends AppCompatActivity  {
             } catch (SecurityException e){
                 Log.e(TAG, "downloadXML(): Security Exception. Needs permission? " +  e.getMessage());
             }
-
             return null;
         }
     }
