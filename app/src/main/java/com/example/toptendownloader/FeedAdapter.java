@@ -34,40 +34,41 @@ public class FeedAdapter extends ArrayAdapter {
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO create tvName, tvArtist, and tvSummary in layout 101
 
-		View view = layoutInflater.inflate(layoutResource, parent, false);
-		 TextView tvName = view.findViewById(R.id.tvName);
-		 TextView tvArtist = view.findViewById(R.id.tvArtist);
-		 TextView tvSummary = view.findViewById(R.id.tvSummary);
-
-		FeedEntry currentApp = applications.get(position);
-		tvName.setText(currentApp.getName());
-		tvArtist.setText(currentApp.getArtist());
-		tvSummary.setText(currentApp.getSummary());
-
-		return view;
-	}
-
-
-
-//		ViewHolder viewHolder;
-//
-//		if (convertView == null){
-//			convertView = layoutInflater.inflate(layoutResource, parent, false);
-//			viewHolder = new ViewHolder(convertView);
-//			convertView.setTag(viewHolder);
-//		} else {
-//			viewHolder = (ViewHolder)convertView.getTag();
-//		}
+//		// method one, slow, new view created every time its needed
+//		View view = layoutInflater.inflate(layoutResource, parent, false);
+//		 TextView tvName = view.findViewById(R.id.tvName);
+//		 TextView tvArtist = view.findViewById(R.id.tvArtist);
+//		 TextView tvSummary = view.findViewById(R.id.tvSummary);
 //
 //		FeedEntry currentApp = applications.get(position);
-//		viewHolder.tvName.setText(currentApp.getName());
-//		viewHolder.tvArtist.setText(currentApp.getArtist());
-//		viewHolder.tvSummary.setText(currentApp.getSummary());
+//		tvName.setText(currentApp.getName());
+//		tvArtist.setText(currentApp.getArtist());
+//		tvSummary.setText(currentApp.getSummary());
 //
-//		return convertView;
+//		return view;
 //	}
+
+
+
+		// faster method, reusing views and only calling findViewById once
+		ViewHolder viewHolder;
+
+		if (convertView == null){
+			convertView = layoutInflater.inflate(layoutResource, parent, false);
+			viewHolder = new ViewHolder(convertView);
+			convertView.setTag(viewHolder);
+		} else {
+			viewHolder = (ViewHolder)convertView.getTag();
+		}
+
+		FeedEntry currentApp = applications.get(position);
+		viewHolder.tvName.setText(currentApp.getName());
+		viewHolder.tvArtist.setText(currentApp.getArtist());
+		viewHolder.tvSummary.setText(currentApp.getSummary());
+
+		return convertView;
+	}
 	
 	private class ViewHolder {
 		private TextView tvName;
@@ -75,9 +76,9 @@ public class FeedAdapter extends ArrayAdapter {
 		private TextView tvSummary;
 		
 		public ViewHolder(View v){
-//			this.tvName = v.findViewById(R.id.tvName);
-//			this.tvArtist = v.findViewById(R.id.tvArtist);
-//			this.tvSummary = v.findViewById(R.id.tvSummary);
+			tvName = v.findViewById(R.id.tvName);
+			tvArtist = v.findViewById(R.id.tvArtist);
+			tvSummary = v.findViewById(R.id.tvSummary);
 
 
 		}
