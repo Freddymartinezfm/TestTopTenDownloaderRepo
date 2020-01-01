@@ -35,7 +35,7 @@ public class FeedAdapter extends ArrayAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-//		// method one, slow, new view created every time its needed
+//		// method one
 //		View view = layoutInflater.inflate(layoutResource, parent, false);
 //		 TextView tvName = view.findViewById(R.id.tvName);
 //		 TextView tvArtist = view.findViewById(R.id.tvArtist);
