@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity  {
     private ListView listApps;
     private String feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=%d/xml";
     private int feedLimit = 10;
+//    boolean hasDownloaded = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,45 +29,72 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         listApps = findViewById(R.id.xmlListView);
         downloadUrl(String.format(feedUrl, feedLimit));
+
+
+
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         this.getMenuInflater().inflate(R.menu.feeds_menu, menu);
+        if (feedLimit == 10) {
+            menu.findItem(R.id.mnu10).setChecked(true);
+        } else {
+            menu.findItem(R.id.mnu25).setChecked(true);
+
+        }
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
-        String feedUrl;
 
         switch (id){
             case R.id.mnuFree:
-            feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=10/xml";
+            feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=%d/xml";
+
             break;
 
             case R.id.mnuPaid:
-            feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/toppaidapplications/limit=10/xml";
+            feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/toppaidapplications/limit=%d/xml";
             break;
 
             case R.id.mnuSongs:
-            feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topsongs/limit=10/xml";
+            feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topsongs/limit=%d/xml";
             break;
 
+            case R.id.mnu10: case R.id.mnu25:
+                if (!item.isChecked()){
+                    item.setChecked(true);
+                    feedLimit = 35 - feedLimit;
+                    Log.d(TAG, "onOptionsItemSelected: " + item.getTitle() + " setting feedlimit to " + feedLimit);
+                } else { // item already checked
+                    Log.d(TAG, "onOptionsItemSelected: " +  item.getTitle() + " feedlimit not changed");
+                }
+                break;
+
+            case R.id.mnuRefresh:
+                Log.d(TAG, "onOptionsItemSelected: refreshing, feedlimit is " + feedLimit);
+                downloadUrl(String.format(feedUrl, feedLimit));
+
+
             default:
-            return super.onOptionsItemSelected(item);
+                return super.onOptionsItemSelected(item);
 
         }
-        downloadUrl(feedUrl);
+
+        downloadUrl(String.format(feedUrl, feedLimit));
+
         return true;
     }
-    
+
     private void downloadUrl(String feedUrl){
         Log.d(TAG, "downloadUrl(): starting AsyncTask ");
         DownloadData downloadData = new DownloadData();
         downloadData.execute(feedUrl);
-        Log.d(TAG, "downloadUrl(): done ");
+        Log.d(TAG, "downloadUrl(): done url is " + feedUrl);
     }
 
     private class DownloadData extends AsyncTask<String, Void, String> {
@@ -74,7 +103,7 @@ public class MainActivity extends AppCompatActivity  {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            //Log.d(TAG, "onPostExecute():  parameter is \n" + s + "\n");
+            Log.d(TAG, "onPostExecute():  parameter is \n" + s + "\n");
             ParseApplications parseApplications = new ParseApplications();
             parseApplications.parse(s);
             FeedAdapter adapter = new FeedAdapter(MainActivity.this, R.layout.list_record, parseApplications.getApplications());
@@ -84,15 +113,22 @@ public class MainActivity extends AppCompatActivity  {
         @Override
         protected String doInBackground(String... strings) {
             Log.d(TAG, "doInBackground(): starts with " + strings[0]);
-            String rssFeed = downloadXML(strings[0]);
+            String rssFeed= "";
+//            HashMap<String, String> hasDownloaded;
+//            hasDownloaded = new HashMap<>();
+//            hasDownloaded.put(feedUrl, "Downloaded");
+//            if (!hasDownloaded.containsKey(feedUrl)){
+//            }
+                rssFeed = downloadXML(strings[0]);
             if (rssFeed == null){
                 //Log.e(TAG, "doInBackground(): error downloading ");
             }
             return rssFeed;
+
         }
 
         private String downloadXML(String urlPath){
-            //Log.d(TAG, "downloadXML(): path is " + urlPath);
+            Log.d(TAG, "downloadXML(): path is " + urlPath);
             StringBuilder xmlResult = new StringBuilder();
             try {
                 URL url = new URL(urlPath);
