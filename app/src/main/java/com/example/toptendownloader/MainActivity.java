@@ -50,9 +50,9 @@ public class MainActivity extends AppCompatActivity  {
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
         Log.d(TAG, "onRestoreInstanceState: restoring " + savedInstanceState.getInt("Limit"));
         Log.d(TAG, "onRestoreInstanceState: restoring " + savedInstanceState.getString("Url"));
-        super.onRestoreInstanceState(savedInstanceState);
         feedLimit =  savedInstanceState.getInt("Limit");
         feedUrl = savedInstanceState.getString("Url");
     }
