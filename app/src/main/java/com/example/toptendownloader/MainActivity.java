@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.BufferedReader;
@@ -48,6 +49,24 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        Log.d(TAG, "onRestoreInstanceState: restoring " + savedInstanceState.getInt("Limit"));
+        Log.d(TAG, "onRestoreInstanceState: restoring " + savedInstanceState.getString("Url"));
+        super.onRestoreInstanceState(savedInstanceState);
+        feedLimit =  savedInstanceState.getInt("Limit");
+        feedUrl = savedInstanceState.getString("Url");
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putInt("Limit", feedLimit);
+        outState.putString("Url", feedUrl);
+        Log.d(TAG, "onSaveInstanceState: saving " + outState.getInt("Limit"));
+        Log.d(TAG, "onSaveInstanceState: saving " + outState.getString("Url"));
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
 
@@ -71,7 +90,9 @@ public class MainActivity extends AppCompatActivity  {
                     feedLimit = 35 - feedLimit;
                     Log.d(TAG, "onOptionsItemSelected: " + item.getTitle() + " setting feedlimit to " + feedLimit);
                 } else { // item already checked
+
                     Log.d(TAG, "onOptionsItemSelected: " +  item.getTitle() + " feedlimit not changed");
+
                 }
                 break;
 
@@ -103,7 +124,7 @@ public class MainActivity extends AppCompatActivity  {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            Log.d(TAG, "onPostExecute():  parameter is \n" + s + "\n");
+            //Log.d(TAG, "onPostExecute():  parameter is \n" + s + "\n");
             ParseApplications parseApplications = new ParseApplications();
             parseApplications.parse(s);
             FeedAdapter adapter = new FeedAdapter(MainActivity.this, R.layout.list_record, parseApplications.getApplications());
