@@ -21,6 +21,10 @@ public class MainActivity extends AppCompatActivity  {
     private ListView listApps;
     private String feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=%d/xml";
     private int feedLimit = 10;
+    public static final String STATE_LIMIT = "STATE_LIMIT";
+    public static final String STATE_URL = "STATE_URL";
+    public String cachedUrl = "invalid";
+
 
 
     @Override
@@ -28,7 +32,14 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listApps = findViewById(R.id.xmlListView);
-        downloadUrl(String.format(feedUrl, feedLimit));
+        if (savedInstanceState == null){
+            downloadUrl(String.format(feedUrl, feedLimit));
+        } else {
+            String urltest = String.format(savedInstanceState.getString(STATE_URL), savedInstanceState.getInt(STATE_LIMIT));
+            Log.d(TAG, "onCreate: saved url " + urltest);
+            downloadUrl(urltest);
+        }
+
     }
 
     @Override
@@ -38,28 +49,31 @@ public class MainActivity extends AppCompatActivity  {
             menu.findItem(R.id.mnu10).setChecked(true);
         } else {
             menu.findItem(R.id.mnu25).setChecked(true);
-
         }
         return true;
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        Log.d(TAG, "onRestoreInstanceState: restoring " + savedInstanceState.getInt("Limit"));
-        Log.d(TAG, "onRestoreInstanceState: restoring " + savedInstanceState.getString("Url"));
-        feedLimit =  savedInstanceState.getInt("Limit");
-        feedUrl = savedInstanceState.getString("Url");
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        Log.d(TAG, "onSaveInstanceState: saving " + feedUrl);
+        Log.d(TAG, "onSaveInstanceState: saving " + feedLimit);
+        outState.putString(STATE_URL, feedUrl);
+        outState.putInt(STATE_LIMIT, feedLimit);
+        super.onSaveInstanceState(outState);
+
     }
 
     @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putInt("Limit", feedLimit);
-        outState.putString("Url", feedUrl);
-        Log.d(TAG, "onSaveInstanceState: saving " + outState.getInt("Limit"));
-        Log.d(TAG, "onSaveInstanceState: saving " + outState.getString("Url"));
-        super.onSaveInstanceState(outState);
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        feedLimit =  savedInstanceState.getInt(STATE_LIMIT);
+        feedUrl = savedInstanceState.getString(STATE_URL);
+
+        Log.d(TAG, "onRestoreInstanceState: restoring " + savedInstanceState.getInt(STATE_LIMIT));
+        Log.d(TAG, "onRestoreInstanceState: restoring " + savedInstanceState.getString(STATE_URL));
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
@@ -68,7 +82,6 @@ public class MainActivity extends AppCompatActivity  {
         switch (id){
             case R.id.mnuFree:
             feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=%d/xml";
-
             break;
 
             case R.id.mnuPaid:
@@ -85,15 +98,17 @@ public class MainActivity extends AppCompatActivity  {
                     feedLimit = 35 - feedLimit;
                     Log.d(TAG, "onOptionsItemSelected: " + item.getTitle() + " setting feedlimit to " + feedLimit);
                 } else { // item already checked
-
                     Log.d(TAG, "onOptionsItemSelected: " +  item.getTitle() + " feedlimit not changed");
-
                 }
                 break;
 
             case R.id.mnuRefresh:
-                Log.d(TAG, "onOptionsItemSelected: refreshing, feedlimit is " + feedLimit);
-                downloadUrl(String.format(feedUrl, feedLimit));
+//                Log.d(TAG, "onOptionsItemSelected: refreshing, feedlimit is " + feedLimit);
+//                Log.d(TAG, "onOptionsItemSelected: refreshing, feedurl is " + feedUrl);
+                //downloadUrl(String.format(feedUrl, feedLimit));
+                cachedUrl = "invalid";
+//                cachedUrl = true;
+                break;
             default:
                 return super.onOptionsItemSelected(item);
 
@@ -104,10 +119,26 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void downloadUrl(String feedUrl){
-        Log.d(TAG, "downloadUrl(): starting AsyncTask ");
-        DownloadData downloadData = new DownloadData();
-        downloadData.execute(feedUrl);
-        Log.d(TAG, "downloadUrl(): done url is " + feedUrl);
+        if (!feedUrl.equalsIgnoreCase(cachedUrl)){ // not "invalid" and a new url
+            Log.d(TAG, "downloadUrl(): starting AsyncTask ");
+            DownloadData downloadData = new DownloadData();
+            downloadData.execute(feedUrl);
+            cachedUrl = feedUrl;
+            Log.d(TAG, "downloadUrl(): done url is " + feedUrl);
+        } else {
+            Log.d(TAG, "downloadUrl: URL not invalid");
+
+        }
+//        if (!cachedUrl){
+//            Log.d(TAG, "downloadUrl(): starting AsyncTask ");
+//            DownloadData downloadData = new DownloadData();
+//            downloadData.execute(feedUrl);
+////            cachedUrl = true;
+//            Log.d(TAG, "downloadUrl(): done url is " + feedUrl);
+//        } else {
+//            Log.d(TAG, "downloadUrl: URL not changed");
+//
+//        }
     }
 
     private class DownloadData extends AsyncTask<String, Void, String> {
