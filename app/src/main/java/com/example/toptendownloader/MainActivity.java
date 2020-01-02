@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity  {
     private ListView listApps;
     private String feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=%d/xml";
     private int feedLimit = 10;
-//    boolean hasDownloaded = false;
+    boolean hasDownloaded = false;
 
 
     @Override
@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity  {
                 break;
 
             case R.id.mnuRefresh:
+                hasDownloaded = false;
                 Log.d(TAG, "onOptionsItemSelected: refreshing, feedlimit is " + feedLimit);
                 downloadUrl(String.format(feedUrl, feedLimit));
 
@@ -93,7 +94,9 @@ public class MainActivity extends AppCompatActivity  {
     private void downloadUrl(String feedUrl){
         Log.d(TAG, "downloadUrl(): starting AsyncTask ");
         DownloadData downloadData = new DownloadData();
-        downloadData.execute(feedUrl);
+        if (!hasDownloaded){
+            downloadData.execute(feedUrl);
+        }
         Log.d(TAG, "downloadUrl(): done url is " + feedUrl);
     }
 
@@ -114,11 +117,6 @@ public class MainActivity extends AppCompatActivity  {
         protected String doInBackground(String... strings) {
             Log.d(TAG, "doInBackground(): starts with " + strings[0]);
             String rssFeed= "";
-//            HashMap<String, String> hasDownloaded;
-//            hasDownloaded = new HashMap<>();
-//            hasDownloaded.put(feedUrl, "Downloaded");
-//            if (!hasDownloaded.containsKey(feedUrl)){
-//            }
                 rssFeed = downloadXML(strings[0]);
             if (rssFeed == null){
                 //Log.e(TAG, "doInBackground(): error downloading ");
@@ -152,6 +150,7 @@ public class MainActivity extends AppCompatActivity  {
                     }
                 }
                 reader.close();
+                hasDownloaded = true;
                 return xmlResult.toString();
             } catch (MalformedURLException e){
                 Log.e(TAG, "downloadXML(): Invalid Url " +  e.getMessage());
