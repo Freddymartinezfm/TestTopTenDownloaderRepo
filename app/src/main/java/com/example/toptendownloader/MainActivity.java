@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity  {
     private ListView listApps;
     private String feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=%d/xml";
     private int feedLimit = 10;
-    //boolean hasDownloaded = false;
 
 
     @Override
@@ -30,10 +29,6 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         listApps = findViewById(R.id.xmlListView);
         downloadUrl(String.format(feedUrl, feedLimit));
-
-
-
-
     }
 
     @Override
@@ -97,9 +92,7 @@ public class MainActivity extends AppCompatActivity  {
                 break;
 
             case R.id.mnuRefresh:
-                //hasDownloaded = false;
                 Log.d(TAG, "onOptionsItemSelected: refreshing, feedlimit is " + feedLimit);
-                //hasDownloaded = false;
                 downloadUrl(String.format(feedUrl, feedLimit));
             default:
                 return super.onOptionsItemSelected(item);
@@ -107,16 +100,13 @@ public class MainActivity extends AppCompatActivity  {
         }
 
         downloadUrl(String.format(feedUrl, feedLimit));
-
         return true;
     }
 
     private void downloadUrl(String feedUrl){
         Log.d(TAG, "downloadUrl(): starting AsyncTask ");
         DownloadData downloadData = new DownloadData();
-        //if (!hasDownloaded){
-            downloadData.execute(feedUrl);
-        //}
+        downloadData.execute(feedUrl);
         Log.d(TAG, "downloadUrl(): done url is " + feedUrl);
     }
 
@@ -170,7 +160,6 @@ public class MainActivity extends AppCompatActivity  {
                     }
                 }
                 reader.close();
-                //hasDownloaded = true;
                 return xmlResult.toString();
             } catch (MalformedURLException e){
                 Log.e(TAG, "downloadXML(): Invalid Url " +  e.getMessage());
