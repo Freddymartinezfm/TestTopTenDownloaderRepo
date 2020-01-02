@@ -21,9 +21,9 @@ public class MainActivity extends AppCompatActivity  {
     private ListView listApps;
     private String feedUrl = "http://ax.itunes.apple.com/WebObjects/MZStoreServices.woa/ws/RSS/topfreeapplications/limit=%d/xml";
     private int feedLimit = 10;
-    public static final String STATE_LIMIT = "STATE_LIMIT";
-    public static final String STATE_URL = "STATE_URL";
-    public String cachedUrl = "invalid";
+    private static final String STATE_LIMIT = "STATE_LIMIT";
+    private static final String STATE_URL = "STATE_URL";
+    private String cachedUrl = "invalid";
 
 
 
@@ -32,13 +32,12 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listApps = findViewById(R.id.xmlListView);
-        if (savedInstanceState == null){
-            downloadUrl(String.format(feedUrl, feedLimit));
-        } else {
-            String urltest = String.format(savedInstanceState.getString(STATE_URL), savedInstanceState.getInt(STATE_LIMIT));
-            Log.d(TAG, "onCreate: saved url " + urltest);
-            downloadUrl(urltest);
+
+        if (savedInstanceState != null){
+            feedUrl = savedInstanceState.getString(STATE_URL);
+            feedLimit = savedInstanceState.getInt(STATE_LIMIT);
         }
+        downloadUrl(String.format(feedUrl, feedLimit));
 
     }
 
