@@ -149,7 +149,8 @@ public class MainActivity extends AppCompatActivity  {
             //Log.d(TAG, "onPostExecute():  parameter is \n" + s + "\n");
             ParseApplications parseApplications = new ParseApplications();
             parseApplications.parse(s);
-            FeedAdapter adapter = new FeedAdapter(MainActivity.this, R.layout.list_record, parseApplications.getApplications());
+            FeedAdapter<FeedEntry> adapter = new FeedAdapter<FeedEntry>(MainActivity.this, R.layout.list_record,
+                    parseApplications.getApplications());
             listApps.setAdapter(adapter);
         }
 

@@ -11,14 +11,14 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class FeedAdapter extends ArrayAdapter {
+public class FeedAdapter<T extends FeedEntry> extends ArrayAdapter {
 	private static final String TAG = "FeedAdapter"; 
 	
 	private final int layoutResource;
 	private final LayoutInflater layoutInflater;
-	private List<FeedEntry> applications;
+	private List<T> applications;
 	
-	public FeedAdapter(Context context, int resource, List<FeedEntry> applications){
+	public FeedAdapter(Context context, int resource, List<T> applications){
 		super(context, resource);
 		Log.d(TAG, "FeedAdapter: ");
 		this.layoutResource = resource;
@@ -35,23 +35,6 @@ public class FeedAdapter extends ArrayAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-//		// method one
-//		View view = layoutInflater.inflate(layoutResource, parent, false);
-//		 TextView tvName = view.findViewById(R.id.tvName);
-//		 TextView tvArtist = view.findViewById(R.id.tvArtist);
-//		 TextView tvSummary = view.findViewById(R.id.tvSummary);
-//
-//		FeedEntry currentApp = applications.get(position);
-//		tvName.setText(currentApp.getName());
-//		tvArtist.setText(currentApp.getArtist());
-//		tvSummary.setText(currentApp.getSummary());
-//
-//		return view;
-//	}
-
-
-
-		// faster method, reusing views and only calling findViewById once
 		ViewHolder viewHolder;
 
 		if (convertView == null){
@@ -64,7 +47,7 @@ public class FeedAdapter extends ArrayAdapter {
 			viewHolder = (ViewHolder)convertView.getTag();
 		}
 
-		FeedEntry currentApp = applications.get(position);
+		T currentApp = applications.get(position);
 		viewHolder.tvName.setText(currentApp.getName());
 		viewHolder.tvArtist.setText(currentApp.getArtist());
 		viewHolder.tvSummary.setText(currentApp.getSummary());
