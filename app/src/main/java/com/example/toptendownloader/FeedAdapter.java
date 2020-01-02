@@ -55,10 +55,12 @@ public class FeedAdapter extends ArrayAdapter {
 		ViewHolder viewHolder;
 
 		if (convertView == null){
+			Log.d(TAG, "getView: called with null");
 			convertView = layoutInflater.inflate(layoutResource, parent, false);
 			viewHolder = new ViewHolder(convertView);
 			convertView.setTag(viewHolder);
 		} else {
+			Log.d(TAG, "getView: provided convertView");
 			viewHolder = (ViewHolder)convertView.getTag();
 		}
 
