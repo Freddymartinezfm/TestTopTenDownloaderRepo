@@ -99,9 +99,8 @@ public class MainActivity extends AppCompatActivity  {
             case R.id.mnuRefresh:
                 hasDownloaded = false;
                 Log.d(TAG, "onOptionsItemSelected: refreshing, feedlimit is " + feedLimit);
+                hasDownloaded = false;
                 downloadUrl(String.format(feedUrl, feedLimit));
-
-
             default:
                 return super.onOptionsItemSelected(item);
 
